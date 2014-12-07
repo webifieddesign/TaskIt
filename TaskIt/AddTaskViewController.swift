@@ -55,9 +55,6 @@ class AddTaskViewController: UIViewController {
         for res in results {
             println(res)
         }
-        
-//        var task = TaskModel(task: taskTextField.text, subtask: subtaskTextField.text, date: dueDatePicker.date, isCompleted: false)
-//        mainVC.baseArray[0].append(task)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

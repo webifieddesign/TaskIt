@@ -17,8 +17,8 @@ class Date {
         components.month = month
         components.day = day
         
-        var gregorianCalendar = NSCalendar(identifier: NSGregorianCalendar)
-        var date = gregorianCalendar?.dateFromComponents(components)
+        var gregorianCalendar = NSCalendar(identifier: NSGregorianCalendar)!
+        var date = gregorianCalendar.dateFromComponents(components)
         
         return date!
     }

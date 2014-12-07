@@ -89,27 +89,52 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "To Do"
+        if fetchedResultsController.sections?.count == 1 {
+            let fetchedObjects = fetchedResultsController.fetchedObjects!
+            let testTask:TaskModel = fetchedObjects[0] as TaskModel
+            if testTask.isCompleted == true {
+                return "Completed"
+            }
+            else {
+                return "To do"
+            }
         }
         else {
-            return "Completed"
+            if section == 0 {
+                return "To do"
+            }
+            else {
+                return "Completed"
+            }
         }
     }
     
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        
+        let thisTask = self.fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
+        
+        if thisTask.isCompleted == true {
+            let toDoAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "To Do", handler: { (action, NSIndexPath) -> Void in
+                thisTask.isCompleted = false
+                (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+                
+            })
+            toDoAction.backgroundColor = UIColor(red:0.16, green:0.51, blue:0.74, alpha:1)
+            return [toDoAction]
+        } else {
+            let completeAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Complete", handler: { (action, NSIndexPath) -> Void in
+                thisTask.isCompleted = true
+                (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+            })
+            completeAction.backgroundColor = UIColor(red:0.15, green:0.72, blue:0.6, alpha:1)
+            return [completeAction]
+        }
+    }
+        
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let taskInstance = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
-        
-        if indexPath.section == 0 {
-            taskInstance.isCompleted = true
-        }
-        else {
-            taskInstance.isCompleted = false
-        }
-        
-        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
     }
+    
     
     // NSFetchedResultsControllerDelegate
     
